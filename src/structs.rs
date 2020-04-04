@@ -51,18 +51,19 @@ impl ZswapConfig {
     }
     pub fn save(self) {
         utils::save_param("accept_threshold_percent", self.accept_threshold_percent)
-            .expect("Couldn't save accept_threshold_percent");
+            .expect("Couldn't save accept_threshold_percent property");
 
-        utils::save_param("compressor", self.compressor).expect("Couldn't save compressor");
+        utils::save_param("compressor", self.compressor)
+            .expect("Couldn't save compressor property");
 
-        utils::save_param("enabled", self.enabled).expect("Couldn't save enabled");
+        utils::save_param("enabled", self.enabled).expect("Couldn't save enabled property");
 
         utils::save_param("max_pool_percent", self.max_pool_percent)
-            .expect("Couldn't save max_pool_percent");
+            .expect("Couldn't save max_pool_percent property");
 
         utils::save_param("same_filled_pages_enabled", self.same_filled_pages_enabled)
-            .expect("Couldn't save same_filled_pages_enabled");
+            .expect("Couldn't save same_filled_pages_enabled property");
 
-        utils::save_param("zpool", self.zpool).expect("Couldn't save zpool");
+        utils::save_param("zpool", self.zpool).expect("Couldn't save zpool property");
     }
 }

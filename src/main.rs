@@ -38,7 +38,7 @@ fn main() {
                 .arg(
                     Arg::with_name("compressor")
                         .long("compressor")
-                        .help("Compressor")
+                        .help("Algorithm for compression")
                         .takes_value(true)
                         .value_name("VALUE"),
                 )
@@ -59,14 +59,14 @@ fn main() {
                 .arg(
                     Arg::with_name("same_filled_pages_enabled")
                         .long("same-filled-pages-enabled")
-                        .help("Enable same filled pages")
+                        .help("Enable same filled pages deduplication")
                         .takes_value(true)
                         .value_name("VALUE"),
                 )
                 .arg(
                     Arg::with_name("zpool")
                         .long("zpool")
-                        .help("Zpool")
+                        .help("Zpool type")
                         .takes_value(true)
                         .value_name("VALUE"),
                 ),
