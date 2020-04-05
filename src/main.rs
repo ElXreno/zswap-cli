@@ -69,6 +69,15 @@ fn main() {
                         .help("Zpool type")
                         .takes_value(true)
                         .value_name("VALUE"),
+                )
+                .arg(
+                    Arg::with_name("use-config").long("use-config").help(
+                        format!(
+                            "When provides will be used config file from {}",
+                            utils::constants::CONFIG_PATH
+                        )
+                        .as_str(),
+                    ),
                 ),
         )
         .get_matches();
@@ -99,8 +108,11 @@ fn main() {
 
                 debug!("Getting params from matches...");
                 let mut params = structs::ZswapParams::load_sys_params();
-                params.load_params_from_matches(&matches);
 
+                if matches.is_present("use-config") {
+                    params.load_params_from_config();
+                }
+                params.load_params_from_matches(&matches);
                 params.save();
             }
         }

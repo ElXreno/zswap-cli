@@ -4,7 +4,23 @@ use std::io::{Error, Write};
 
 pub mod constants;
 
-use crate::structs::{ZswapParam, ZswapParams};
+use crate::structs::{ZswapParam, ZswapParams, ZswapParamsConf};
+
+pub fn read_config() -> Option<ZswapParamsConf> {
+    let config_str = fs::read_to_string(constants::CONFIG_PATH).unwrap_or("".to_string());
+
+    match serde_ini::from_str::<ZswapParamsConf>(&config_str) {
+        Ok(s) => Some(s),
+        Err(e) => {
+            warn!(
+                "Failed to read config file! Path: {}, error: {}",
+                constants::CONFIG_PATH,
+                e
+            );
+            None
+        }
+    }
+}
 
 pub fn read_sys_params() -> ZswapParams {
     let mut params = ZswapParams { params: vec![] };
@@ -34,9 +50,11 @@ pub fn read_sys_param(param_name: String) -> ZswapParam {
 }
 
 pub fn save_sys_params(params: &ZswapParams) {
+    // TODO: Do not show this when nothing to save
     info!("Saving params...");
     for param in &params.params {
         if param.value.is_some()
+            && param.value.as_ref().unwrap() != ""
             && param.sys_value.is_some()
             && param
                 .sys_value
@@ -59,7 +77,7 @@ pub fn save_sys_params(params: &ZswapParams) {
                 ),
             }
         } else {
-            debug!("Ignoring param {}", param.name);
+            info!("Ignoring param {}", param.name);
         }
     }
     info!("Done!");
