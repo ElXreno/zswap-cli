@@ -1,15 +1,13 @@
 %global debug_package %{nil}
 
-%global commit b5ae6580b07402c0f56908404cb39123ce12c3b8
-
 Name:           zswap-cli
-Version:        0.1.0
+Version:        1.0.0
 Release:        1%{?dist}
 Summary:        Utility for controlling zswap parameters
 
 License:        ASL 2.0
 URL:            https://github.com/ElXreno/zswap-cli
-Source0:        %{url}/archive/%{commit}/%{name}-%{commit}.tar.gz
+Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        %{name}.conf
 Source2:        %{name}.service
 
@@ -21,7 +19,7 @@ Utility for controlling zswap parameters
 
 
 %prep
-%autosetup -n %{name}-%{commit}
+%autosetup
 
 
 %build
