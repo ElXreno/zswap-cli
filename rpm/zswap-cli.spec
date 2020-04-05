@@ -15,7 +15,7 @@ BuildRequires: cargo
 BuildRequires: systemd
 
 %description
-Utility for controlling zswap parameters
+Utility for controlling zswap parameters.
 
 
 %prep
