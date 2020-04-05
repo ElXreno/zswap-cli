@@ -3,4 +3,20 @@ Utility for controlling zswap parameters
 
 ---
 
-Created just for fun.
+```bash
+zswap-cli 0.1.0
+ElXreno <elxreno@gmail.com>
+
+
+USAGE:
+    zswap-cli [SUBCOMMAND]
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+SUBCOMMANDS:
+    help    Prints this message or the help of the given subcommand(s)
+    info    Displays current configuration
+    set     Sets configuration
+```
