@@ -97,7 +97,7 @@ fn main() {
             if let Some(ref matches) = matches.subcommand_matches("set") {
                 debug!("Matched set subcommand");
 
-                if !is_root() {
+                if !utils::is_root() {
                     error!("You are not a root user!");
                     exit(1);
                 }
@@ -121,9 +121,4 @@ fn get_current_params() -> structs::ZswapConfig {
 
 fn get_params_from_matches(matches: &ArgMatches) -> structs::ZswapConfig {
     structs::ZswapConfig::load_from_matches(matches)
-}
-
-fn is_root() -> bool {
-    // FIXME: Should I check write permission instead of user matching?
-    whoami::user() == String::from("root")
 }

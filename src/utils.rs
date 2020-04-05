@@ -21,3 +21,8 @@ pub fn save_param(param: &str, value: String) -> Result<(), Error> {
         .unwrap()
         .write_all(value.as_bytes())
 }
+
+pub fn is_root() -> bool {
+    // FIXME: Should I check write permission instead of user matching?
+    whoami::user() == String::from("root")
+}
