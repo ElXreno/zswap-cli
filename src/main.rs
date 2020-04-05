@@ -3,7 +3,7 @@ extern crate clap;
 #[macro_use]
 extern crate log;
 
-use clap::{App, AppSettings, Arg, ArgMatches, SubCommand};
+use clap::{App, AppSettings, Arg, SubCommand};
 use env_logger::Env;
 use std::io::Write;
 use std::process::exit;
@@ -78,20 +78,15 @@ fn main() {
         Some("info") => {
             debug!("Matched info subcommand");
 
-            let current_config = get_current_params();
+            let sys_params = structs::ZswapParams::load_sys_params();
 
-            info!(
-                "accept_threshold_percent: {}",
-                current_config.accept_threshold_percent
-            );
-            info!("compressor: {}", current_config.compressor);
-            info!("enabled: {}", current_config.enabled);
-            info!("max_pool_percent: {}", current_config.max_pool_percent);
-            info!(
-                "same_filled_pages_enabled: {}",
-                current_config.same_filled_pages_enabled
-            );
-            info!("zpool: {}", current_config.zpool);
+            for sys_param in sys_params.params {
+                info!(
+                    "{}: {}",
+                    sys_param.name,
+                    sys_param.sys_value.unwrap_or("NaN".to_string())
+                );
+            }
         }
         Some("set") => {
             if let Some(ref matches) = matches.subcommand_matches("set") {
@@ -103,22 +98,14 @@ fn main() {
                 }
 
                 debug!("Getting params from matches...");
-                let config = get_params_from_matches(&matches);
+                let mut params = structs::ZswapParams::load_sys_params();
+                params.load_params_from_matches(&matches);
 
-                info!("Saving...");
-                config.save();
+                params.save();
             }
         }
         _ => {
             debug!("Matched None o_O");
         }
     }
-}
-
-fn get_current_params() -> structs::ZswapParams {
-    structs::ZswapParams::load_current_params()
-}
-
-fn get_params_from_matches(matches: &ArgMatches) -> structs::ZswapParams {
-    structs::ZswapParams::load_from_matches(matches)
 }
