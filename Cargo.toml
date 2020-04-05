@@ -6,6 +6,12 @@ edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+# Profiles
+[profile.release]
+lto = true
+panic = "abort"
+codegen-units = 1
+
 [dependencies]
 clap = "2.33.0"
 env_logger = "0.7.1"
