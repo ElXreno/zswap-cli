@@ -1,7 +1,7 @@
 use crate::utils;
 use clap::ArgMatches;
 
-pub struct ZswapConfig {
+pub struct ZswapParams {
     pub accept_threshold_percent: String,
     pub compressor: String,
     pub enabled: String,
@@ -10,9 +10,9 @@ pub struct ZswapConfig {
     pub zpool: String,
 }
 
-impl ZswapConfig {
+impl ZswapParams {
     pub fn load_current_params() -> Self {
-        ZswapConfig {
+        ZswapParams {
             accept_threshold_percent: utils::read_param("accept_threshold_percent").to_string(),
             compressor: utils::read_param("compressor").to_string(),
             enabled: utils::read_param("enabled").to_string(),
@@ -22,7 +22,7 @@ impl ZswapConfig {
         }
     }
     pub fn load_from_matches(matches: &ArgMatches) -> Self {
-        ZswapConfig {
+        ZswapParams {
             accept_threshold_percent: matches
                 .value_of("accept_threshold_percent")
                 .unwrap_or(utils::read_param("accept_threshold_percent").as_str())

@@ -115,10 +115,10 @@ fn main() {
     }
 }
 
-fn get_current_params() -> structs::ZswapConfig {
-    structs::ZswapConfig::load_current_params()
+fn get_current_params() -> structs::ZswapParams {
+    structs::ZswapParams::load_current_params()
 }
 
-fn get_params_from_matches(matches: &ArgMatches) -> structs::ZswapConfig {
-    structs::ZswapConfig::load_from_matches(matches)
+fn get_params_from_matches(matches: &ArgMatches) -> structs::ZswapParams {
+    structs::ZswapParams::load_from_matches(matches)
 }
