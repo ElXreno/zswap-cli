@@ -1,6 +1,6 @@
 %global debug_package %{nil}
 
-%global commit 9419b2f2f3e6c79de581d2b7dc5df83eed4de4b6
+%global commit b5ae6580b07402c0f56908404cb39123ce12c3b8
 
 Name:           zswap-cli
 Version:        0.1.0
