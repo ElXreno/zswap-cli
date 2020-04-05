@@ -23,7 +23,7 @@ fn main() {
         .author(crate_authors!())
         .about(crate_description!())
         .setting(AppSettings::ArgRequiredElseHelp)
-        .subcommand(SubCommand::with_name("info").about("Displays current configuration"))
+        .subcommand(SubCommand::with_name("info").about("Displays current parameters"))
         .subcommand(
             SubCommand::with_name("set")
                 .about("Sets configuration")

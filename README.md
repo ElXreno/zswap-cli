@@ -17,6 +17,6 @@ FLAGS:
 
 SUBCOMMANDS:
     help    Prints this message or the help of the given subcommand(s)
-    info    Displays current configuration
+    info    Displays current parameters
     set     Sets configuration
 ```
