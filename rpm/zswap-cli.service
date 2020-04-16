@@ -5,6 +5,8 @@ Documentation=man:zswap-cli(1) https://github.com/ElXreno/zswap-cli
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/zswap-cli set --use-config
+ExecStop=/usr/bin/zswap-cli --enabled N
+RemainAfterExit=yes
 ProtectSystem=strict
 ProtectHome=true
 
