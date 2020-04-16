@@ -1,5 +1,6 @@
 pub const CONFIG_PATH: &str = "/etc/zswap-cli.conf";
 pub const ZSWAP_BASEPATH: &str = "/sys/module/zswap/parameters";
+pub const ZSWAP_DEBUG_BASEPATH: &str = "/sys/kernel/debug/zswap";
 pub const PARAM_LIST: [&str; 6] = [
     "accept_threshold_percent",
     "compressor",

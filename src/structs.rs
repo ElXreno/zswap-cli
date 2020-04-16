@@ -2,6 +2,15 @@ use crate::utils;
 use clap::ArgMatches;
 use serde_derive::Deserialize;
 
+pub struct ZswapDebugParam {
+    pub name: String,
+    pub sys_value: Option<String>,
+}
+
+pub struct ZswapDebugParams {
+    pub params: Vec<ZswapDebugParam>,
+}
+
 pub struct ZswapParam {
     pub name: String,
     pub value: Option<String>,
@@ -39,6 +48,12 @@ impl Default for ZswapParamsConf {
             same_filled_pages_enabled: "".to_string(),
             zpool: "".to_string(),
         }
+    }
+}
+
+impl ZswapDebugParams {
+    pub fn load_sys_params() -> Self {
+        utils::read_debug_params()
     }
 }
 

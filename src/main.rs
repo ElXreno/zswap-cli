@@ -24,6 +24,7 @@ fn main() {
         .about(crate_description!())
         .setting(AppSettings::ArgRequiredElseHelp)
         .subcommand(SubCommand::with_name("info").about("Displays current parameters"))
+        .subcommand(SubCommand::with_name("stats").about("Displays current zswap stats"))
         .subcommand(
             SubCommand::with_name("set")
                 .about("Sets configuration")
@@ -95,6 +96,39 @@ fn main() {
                     sys_param.name,
                     sys_param.sys_value.unwrap_or("NaN".to_string())
                 );
+            }
+        }
+        Some("stats") => {
+            debug!("Matched stats subcommand");
+
+            if !utils::is_root() {
+                error!("You are not a root user!");
+                exit(1);
+            }
+
+            let debug_params = structs::ZswapDebugParams::load_sys_params();
+
+            for debug_param in debug_params.params {
+                match debug_param.name.as_str() {
+                    "same_filled_pages" | "stored_pages" => {
+                        let value = debug_param.sys_value.unwrap_or("NaN".to_string());
+                        // TODO: Get page size instead of hardcoded value
+                        let float_value = (utils::parse_int(value) * 4096) as f32 / 1024.0 / 1024.0;
+
+                        info!("{}: {:.2} MB", debug_param.name, float_value);
+                    }
+                    "pool_total_size" => {
+                        let value = debug_param.sys_value.unwrap_or("NaN".to_string());
+                        let float_value = utils::get_bytes(value) as f32 / 1024.0 / 1024.0;
+
+                        info!("{}: {:.2} MB", debug_param.name, float_value)
+                    }
+                    _ => info!(
+                        "{}: {}",
+                        debug_param.name,
+                        debug_param.sys_value.unwrap_or("NaN".to_string())
+                    ),
+                }
             }
         }
         Some("set") => {

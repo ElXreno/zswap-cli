@@ -4,7 +4,7 @@ use std::io::{Error, Write};
 
 pub mod constants;
 
-use crate::structs::{ZswapParam, ZswapParams, ZswapParamsConf};
+use crate::structs::{ZswapDebugParam, ZswapDebugParams, ZswapParam, ZswapParams, ZswapParamsConf};
 
 pub fn read_config() -> Option<ZswapParamsConf> {
     let config_str = fs::read_to_string(constants::CONFIG_PATH).unwrap_or("".to_string());
@@ -21,6 +21,8 @@ pub fn read_config() -> Option<ZswapParamsConf> {
         }
     }
 }
+
+// TODO: Optimize this very ugly and trashy code
 
 pub fn read_sys_params() -> ZswapParams {
     let mut params = ZswapParams { params: vec![] };
@@ -43,6 +45,32 @@ pub fn read_sys_param(param_name: String) -> ZswapParam {
     let param = ZswapParam {
         name: param_name,
         value: None,
+        sys_value: Some(sys_value),
+    };
+
+    param
+}
+
+pub fn read_debug_params() -> ZswapDebugParams {
+    let mut params = ZswapDebugParams { params: vec![] };
+    let files = get_files(constants::ZSWAP_DEBUG_BASEPATH);
+
+    for file in files {
+        params.params.push(read_debug_param(file));
+    }
+
+    params
+}
+
+pub fn read_debug_param(param_name: String) -> ZswapDebugParam {
+    let path = format!("{}/{}", constants::ZSWAP_DEBUG_BASEPATH, param_name);
+    let sys_value = fs::read_to_string(&path)
+        .expect(format!("Can't read {} file", path).as_str())
+        .trim()
+        .to_string();
+
+    let param = ZswapDebugParam {
+        name: param_name,
         sys_value: Some(sys_value),
     };
 
@@ -92,7 +120,7 @@ pub fn save_sys_param(param: &ZswapParam) -> Result<(), Error> {
 }
 
 pub fn is_root() -> bool {
-    // FIXME: Should I check write permission instead of user matching?
+    // FIXME: Should I check read/write permission instead of user matching?
     whoami::user() == String::from("root")
 }
 
@@ -115,4 +143,20 @@ fn get_files(dir: &str) -> Vec<String> {
     }
 
     files
+}
+
+pub fn get_bytes(value: String) -> i32 {
+    return if let Ok(value) = value.parse::<i32>() {
+        value
+    } else {
+        0
+    }
+}
+
+pub fn parse_int(value: String) -> i32 {
+    return if let Ok(value) = value.parse::<i32>() {
+        value
+    } else {
+        0
+    }
 }
