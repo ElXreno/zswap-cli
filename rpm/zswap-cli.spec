@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:           zswap-cli
-Version:        1.0.0
+Version:        1.0.1
 Release:        1%{?dist}
 Summary:        Utility for controlling zswap parameters
 
@@ -53,5 +53,8 @@ install -m 0644 -Dp %{SOURCE1} %{buildroot}%{_sysconfdir}/%{name}.conf
 
 
 %changelog
-* Sun Apr  5 2020 ElXreno <elxreno@gmail.com>
+* Thu Apr 16 2020 ElXreno <elxreno@gmail.com> - 1.0.1-1
+- Updated to version 1.0.1
+
+* Sun Apr  5 2020 ElXreno <elxreno@gmail.com> - 1.0.0-1
 - Initial packaging

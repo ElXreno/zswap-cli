@@ -1,6 +1,6 @@
 [package]
 name = "zswap-cli"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["ElXreno <elxreno@gmail.com>"]
 edition = "2018"
 
