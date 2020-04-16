@@ -1,6 +1,6 @@
 [Unit]
 Description=ZSwap-cli service
-Documentation=man:zswap-cli(1) https://github.com/ElXreno/zswap-cli
+Documentation=https://github.com/ElXreno/zswap-cli
 
 [Service]
 Type=oneshot
