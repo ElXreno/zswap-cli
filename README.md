@@ -4,7 +4,7 @@ Utility for controlling zswap parameters
 ---
 
 ```bash
-zswap-cli 0.1.0
+zswap-cli 0.1.1
 ElXreno <elxreno@gmail.com>
 
 
