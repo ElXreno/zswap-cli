@@ -112,14 +112,14 @@ fn main() {
                     for debug_param in debug_params.params {
                         match debug_param.name.as_str() {
                             "same_filled_pages" | "stored_pages" => {
-                                let value = debug_param.sys_value.unwrap_or(-1);
+                                let value = debug_param.sys_value.unwrap_or(0);
                                 // TODO: Get page size instead of hardcoded value
                                 let float_value = (value * 4096) as f32 / 1024.0 / 1024.0;
 
                                 info!("{}: {:.2} MB", debug_param.name, float_value);
                             }
                             "pool_total_size" => {
-                                let value = debug_param.sys_value.unwrap_or(-1);
+                                let value = debug_param.sys_value.unwrap_or(0);
                                 let float_value = value as f32 / 1024.0 / 1024.0;
 
                                 info!("{}: {:.2} MB", debug_param.name, float_value)
@@ -127,7 +127,7 @@ fn main() {
                             _ => info!(
                                 "{}: {}",
                                 debug_param.name,
-                                debug_param.sys_value.unwrap_or(-1)
+                                debug_param.sys_value.unwrap_or(0)
                             ),
                         }
                     }
@@ -138,7 +138,7 @@ fn main() {
                         .find(|x| x.name == String::from("pool_total_size"))
                         .unwrap_or(&structs::ZswapDebugParam::default())
                         .sys_value
-                        .unwrap_or(-1);
+                        .unwrap_or(0);
 
                     let pages_size = {
                         let pages_size = debug_params
@@ -147,24 +147,16 @@ fn main() {
                             .find(|x| x.name == String::from("stored_pages"))
                             .unwrap_or(&structs::ZswapDebugParam::default())
                             .sys_value
-                            .unwrap_or(-1);
+                            .unwrap_or(0);
 
-                        if pages_size != -1 {
-                            pages_size * 4096
-                        } else {
-                            pages_size
-                        }
+                        pages_size * 4096
                     };
 
                     let mem_info = linux_stats::meminfo().unwrap_or_default();
 
                     let consumed_size = (mem_info.swap_total - mem_info.swap_free) as f32 / 1024.0;
 
-                    let compression_ratio = if pool_size == -1 || pages_size == -1 {
-                        -1 as f32
-                    } else {
-                        pages_size as f32 / pool_size as f32
-                    };
+                    let compression_ratio = pages_size as f32 / pool_size as f32;
 
                     let pool_size = pool_size as f32 / 1024.0 / 1024.0;
                     let pages_size = pages_size as f32 / 1024.0 / 1024.0;
