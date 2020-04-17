@@ -6,7 +6,6 @@ extern crate log;
 use clap::{App, AppSettings, Arg, SubCommand};
 use env_logger::Env;
 use std::io::Write;
-use std::process::exit;
 
 mod structs;
 mod utils;
@@ -101,10 +100,7 @@ fn main() {
         Some("stats") => {
             debug!("Matched stats subcommand");
 
-            if !utils::is_root() {
-                error!("You are not a root user!");
-                exit(1);
-            }
+            utils::check_root();
 
             let debug_params = structs::ZswapDebugParams::load_sys_params();
 
@@ -135,10 +131,7 @@ fn main() {
             if let Some(ref matches) = matches.subcommand_matches("set") {
                 debug!("Matched set subcommand");
 
-                if !utils::is_root() {
-                    error!("You are not a root user!");
-                    exit(1);
-                }
+                utils::check_root();
 
                 debug!("Getting params from matches...");
                 let mut params = structs::ZswapParams::load_sys_params();

@@ -5,6 +5,7 @@ use std::io::{Error, Write};
 pub mod constants;
 
 use crate::structs::{ZswapDebugParam, ZswapDebugParams, ZswapParam, ZswapParams, ZswapParamsConf};
+use std::process::exit;
 
 pub fn read_config() -> Option<ZswapParamsConf> {
     let config_str = fs::read_to_string(constants::CONFIG_PATH).unwrap_or("".to_string());
@@ -124,6 +125,13 @@ pub fn is_root() -> bool {
     whoami::user() == String::from("root")
 }
 
+pub fn check_root() {
+    if !is_root() {
+        error!("You are not a root user!");
+        exit(1);
+    }
+}
+
 fn get_files(dir: &str) -> Vec<String> {
     let mut files: Vec<String> = Vec::new();
 
@@ -150,7 +158,7 @@ pub fn get_bytes(value: String) -> i32 {
         value
     } else {
         0
-    }
+    };
 }
 
 pub fn parse_int(value: String) -> i32 {
@@ -158,5 +166,5 @@ pub fn parse_int(value: String) -> i32 {
         value
     } else {
         0
-    }
+    };
 }
