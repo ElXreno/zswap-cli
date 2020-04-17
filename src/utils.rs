@@ -72,7 +72,7 @@ pub fn read_debug_param(param_name: String) -> ZswapDebugParam {
 
     let param = ZswapDebugParam {
         name: param_name,
-        sys_value: Some(sys_value),
+        sys_value: sys_value.parse::<i32>().ok(),
     };
 
     param
@@ -151,20 +151,4 @@ fn get_files(dir: &str) -> Vec<String> {
     }
 
     files
-}
-
-pub fn get_bytes(value: String) -> i32 {
-    return if let Ok(value) = value.parse::<i32>() {
-        value
-    } else {
-        0
-    };
-}
-
-pub fn parse_int(value: String) -> i32 {
-    return if let Ok(value) = value.parse::<i32>() {
-        value
-    } else {
-        0
-    };
 }

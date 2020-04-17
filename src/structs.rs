@@ -4,7 +4,7 @@ use serde_derive::Deserialize;
 
 pub struct ZswapDebugParam {
     pub name: String,
-    pub sys_value: Option<String>,
+    pub sys_value: Option<i32>,
 }
 
 pub struct ZswapDebugParams {
@@ -47,6 +47,15 @@ impl Default for ZswapParamsConf {
             max_pool_percent: "".to_string(),
             same_filled_pages_enabled: "".to_string(),
             zpool: "".to_string(),
+        }
+    }
+}
+
+impl Default for ZswapDebugParam {
+    fn default() -> Self {
+        ZswapDebugParam {
+            name: "".to_string(),
+            sys_value: None,
         }
     }
 }

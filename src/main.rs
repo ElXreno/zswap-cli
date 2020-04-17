@@ -23,7 +23,16 @@ fn main() {
         .about(crate_description!())
         .setting(AppSettings::ArgRequiredElseHelp)
         .subcommand(SubCommand::with_name("info").about("Displays current parameters"))
-        .subcommand(SubCommand::with_name("stats").about("Displays current zswap stats"))
+        .subcommand(
+            SubCommand::with_name("stats")
+                .about("Displays current zswap stats")
+                .arg(
+                    Arg::with_name("display-all")
+                        .long("all")
+                        .short("a")
+                        .help("Displays all debug variables"),
+                ),
+        )
         .subcommand(
             SubCommand::with_name("set")
                 .about("Sets configuration")
@@ -98,32 +107,78 @@ fn main() {
             }
         }
         Some("stats") => {
-            debug!("Matched stats subcommand");
+            if let Some(ref matches) = matches.subcommand_matches("stats") {
+                debug!("Matched stats subcommand");
 
-            utils::check_root();
+                utils::check_root();
 
-            let debug_params = structs::ZswapDebugParams::load_sys_params();
+                let debug_params = structs::ZswapDebugParams::load_sys_params();
 
-            for debug_param in debug_params.params {
-                match debug_param.name.as_str() {
-                    "same_filled_pages" | "stored_pages" => {
-                        let value = debug_param.sys_value.unwrap_or("NaN".to_string());
-                        // TODO: Get page size instead of hardcoded value
-                        let float_value = (utils::parse_int(value) * 4096) as f32 / 1024.0 / 1024.0;
+                if matches.is_present("display-all") {
+                    for debug_param in debug_params.params {
+                        match debug_param.name.as_str() {
+                            "same_filled_pages" | "stored_pages" => {
+                                let value = debug_param.sys_value.unwrap_or(-1);
+                                // TODO: Get page size instead of hardcoded value
+                                let float_value = (value * 4096) as f32 / 1024.0 / 1024.0;
 
-                        info!("{}: {:.2} MB", debug_param.name, float_value);
+                                info!("{}: {:.2} MB", debug_param.name, float_value);
+                            }
+                            "pool_total_size" => {
+                                let value = debug_param.sys_value.unwrap_or(-1);
+                                let float_value = value as f32 / 1024.0 / 1024.0;
+
+                                info!("{}: {:.2} MB", debug_param.name, float_value)
+                            }
+                            _ => info!(
+                                "{}: {}",
+                                debug_param.name,
+                                debug_param.sys_value.unwrap_or(-1)
+                            ),
+                        }
                     }
-                    "pool_total_size" => {
-                        let value = debug_param.sys_value.unwrap_or("NaN".to_string());
-                        let float_value = utils::get_bytes(value) as f32 / 1024.0 / 1024.0;
+                } else {
+                    let pool_size = debug_params
+                        .params
+                        .iter()
+                        .find(|x| x.name == String::from("pool_total_size"))
+                        .unwrap_or(&structs::ZswapDebugParam::default())
+                        .sys_value
+                        .unwrap_or(-1);
 
-                        info!("{}: {:.2} MB", debug_param.name, float_value)
-                    }
-                    _ => info!(
-                        "{}: {}",
-                        debug_param.name,
-                        debug_param.sys_value.unwrap_or("NaN".to_string())
-                    ),
+                    let pages_size = {
+                        let pages_size = debug_params
+                            .params
+                            .iter()
+                            .find(|x| x.name == String::from("stored_pages"))
+                            .unwrap_or(&structs::ZswapDebugParam::default())
+                            .sys_value
+                            .unwrap_or(-1);
+
+                        if pages_size != -1 {
+                            pages_size * 4096
+                        } else {
+                            pages_size
+                        }
+                    };
+
+                    let mem_info = linux_stats::meminfo().unwrap_or_default();
+
+                    let consumed_size = (mem_info.swap_total - mem_info.swap_free) as f32 / 1024.0;
+
+                    let compression_ratio = if pool_size == -1 || pages_size == -1 {
+                        -1 as f32
+                    } else {
+                        pages_size as f32 / pool_size as f32
+                    };
+
+                    let pool_size = pool_size as f32 / 1024.0 / 1024.0;
+                    let pages_size = pages_size as f32 / 1024.0 / 1024.0;
+
+                    info!(
+                        "Pool size: {:.2} MB | Stored pages: {:.2} MB | Consumed {:.1} MB | Compression ratio: {:.1}",
+                        pool_size, pages_size, consumed_size, compression_ratio
+                    );
                 }
             }
         }
