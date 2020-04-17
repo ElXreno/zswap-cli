@@ -79,15 +79,9 @@ fn main() {
                         .takes_value(true)
                         .value_name("VALUE"),
                 )
-                .arg(
-                    Arg::with_name("use-config").long("use-config").help(
-                        format!(
-                            "When provides will be used config file from {}",
-                            utils::constants::CONFIG_PATH
-                        )
-                        .as_str(),
-                    ),
-                ),
+                .arg(Arg::with_name("use-config").long("use-config").help(
+                    format!("Use config file from {}", utils::constants::CONFIG_PATH).as_str(),
+                )),
         )
         .get_matches();
 
