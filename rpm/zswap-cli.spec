@@ -10,9 +10,11 @@ URL:            https://github.com/ElXreno/zswap-cli
 Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        %{name}.conf
 Source2:        %{name}.service
+Source3:        %{name}.md
 
-BuildRequires: cargo
-BuildRequires: systemd
+BuildRequires:  cargo
+BuildRequires:  systemd
+BuildRequires:  pandoc
 
 %description
 Utility for controlling zswap parameters.
@@ -24,12 +26,16 @@ Utility for controlling zswap parameters.
 
 %build
 cargo build --release
+strip target/release/%{name}
+pandoc %{SOURCE3} -s -t man -o zswap-cli.1
 
 
 %install
 install -m 0755 -Dp target/release/%{name} %{buildroot}%{_bindir}/%{name}
 install -m 0644 -Dp %{SOURCE2} %{buildroot}%{_unitdir}/%{name}.service
 install -m 0644 -Dp %{SOURCE1} %{buildroot}%{_sysconfdir}/%{name}.conf
+
+install -m 0644 -Dp %{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 
 
 %post
@@ -50,6 +56,7 @@ install -m 0644 -Dp %{SOURCE1} %{buildroot}%{_sysconfdir}/%{name}.conf
 %{_bindir}/%{name}
 %{_unitdir}/%{name}.service
 %config(noreplace) %{_sysconfdir}/%{name}.conf
+%{_mandir}/man1/%{name}.*
 
 
 %changelog
