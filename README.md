@@ -4,7 +4,7 @@ Utility for controlling zswap parameters
 ---
 
 ```bash
-zswap-cli 0.1.1
+zswap-cli 1.0.1
 ElXreno <elxreno@gmail.com>
 
 
@@ -16,7 +16,8 @@ FLAGS:
     -V, --version    Prints version information
 
 SUBCOMMANDS:
-    help    Prints this message or the help of the given subcommand(s)
-    info    Displays current parameters
-    set     Sets configuration
+    help     Prints this message or the help of the given subcommand(s)
+    info     Displays current parameters
+    set      Sets configuration
+    stats    Displays current zswap stats
 ```
