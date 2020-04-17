@@ -114,7 +114,9 @@ fn main() {
                             "same_filled_pages" | "stored_pages" => {
                                 let value = debug_param.sys_value.unwrap_or(0);
                                 // TODO: Get page size instead of hardcoded value
-                                let float_value = (value * 4096) as f32 / 1024.0 / 1024.0;
+                                let float_value = (value as usize * utils::get_page_size()) as f32
+                                    / 1024.0
+                                    / 1024.0;
 
                                 info!("{}: {:.2} MB", debug_param.name, float_value);
                             }
@@ -149,7 +151,7 @@ fn main() {
                             .sys_value
                             .unwrap_or(0);
 
-                        pages_size * 4096
+                        (pages_size as usize * utils::get_page_size()) as i32
                     };
 
                     let mem_info = linux_stats::meminfo().unwrap_or_default();

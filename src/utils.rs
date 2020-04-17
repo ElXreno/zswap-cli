@@ -1,3 +1,6 @@
+extern crate libc;
+
+use libc::{sysconf, _SC_PAGESIZE};
 use std::fs;
 use std::fs::File;
 use std::io::{Error, Write};
@@ -151,4 +154,8 @@ fn get_files(dir: &str) -> Vec<String> {
     }
 
     files
+}
+
+pub fn get_page_size() -> usize {
+    unsafe { sysconf(_SC_PAGESIZE) as usize }
 }
