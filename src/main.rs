@@ -114,7 +114,7 @@ fn main() {
                             "same_filled_pages" | "stored_pages" => {
                                 let value = debug_param.sys_value.unwrap_or(0);
                                 // TODO: Get page size instead of hardcoded value
-                                let float_value = (value as usize * utils::get_page_size()) as f32
+                                let float_value = (value as usize * utils::get_page_size()) as f64
                                     / 1024.0
                                     / 1024.0;
 
@@ -122,7 +122,7 @@ fn main() {
                             }
                             "pool_total_size" => {
                                 let value = debug_param.sys_value.unwrap_or(0);
-                                let float_value = value as f32 / 1024.0 / 1024.0;
+                                let float_value = value as f64 / 1024.0 / 1024.0;
 
                                 info!("{}: {:.2} MB", debug_param.name, float_value)
                             }
@@ -151,17 +151,17 @@ fn main() {
                             .sys_value
                             .unwrap_or(0);
 
-                        (pages_size as usize * utils::get_page_size()) as i32
+                        (pages_size as usize * utils::get_page_size()) as i64
                     };
 
                     let mem_info = linux_stats::meminfo().unwrap_or_default();
 
-                    let consumed_size = (mem_info.swap_total - mem_info.swap_free) as f32 / 1024.0;
+                    let consumed_size = (mem_info.swap_total - mem_info.swap_free) as f64 / 1024.0;
 
-                    let compression_ratio = pages_size as f32 / pool_size as f32;
+                    let compression_ratio = pages_size as f64 / pool_size as f64;
 
-                    let pool_size = pool_size as f32 / 1024.0 / 1024.0;
-                    let pages_size = pages_size as f32 / 1024.0 / 1024.0;
+                    let pool_size = pool_size as f64 / 1024.0 / 1024.0;
+                    let pages_size = pages_size as f64 / 1024.0 / 1024.0;
 
                     info!(
                         "Pool size: {:.2} MB | Stored pages: {:.2} MB | Consumed {:.1} MB | Compression ratio: {:.1}",

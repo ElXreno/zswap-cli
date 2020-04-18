@@ -4,7 +4,7 @@ use serde_derive::Deserialize;
 
 pub struct ZswapDebugParam {
     pub name: String,
-    pub sys_value: Option<i32>,
+    pub sys_value: Option<i64>,
 }
 
 pub struct ZswapDebugParams {

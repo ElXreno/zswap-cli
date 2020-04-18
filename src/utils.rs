@@ -75,7 +75,7 @@ pub fn read_debug_param(param_name: String) -> ZswapDebugParam {
 
     let param = ZswapDebugParam {
         name: param_name,
-        sys_value: sys_value.parse::<i32>().ok(),
+        sys_value: sys_value.parse::<i64>().ok(),
     };
 
     param
