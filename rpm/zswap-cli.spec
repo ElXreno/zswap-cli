@@ -5,7 +5,7 @@ Version:        1.0.2
 Release:        1%{?dist}
 Summary:        Utility for controlling zswap parameters
 
-License:        ASL 2.0
+License:        MPLv2.0
 URL:            https://github.com/ElXreno/zswap-cli
 Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        %{name}.conf
