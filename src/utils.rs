@@ -14,6 +14,11 @@ pub mod constants;
 use crate::structs::{ZswapDebugParam, ZswapDebugParams, ZswapParam, ZswapParams, ZswapParamsConf};
 use std::process::exit;
 
+lazy_static! {
+    static ref IS_ROOT: bool = { whoami::user() == String::from("root") };
+    static ref PAGE_SIZE: usize = { unsafe { sysconf(_SC_PAGESIZE) as usize } };
+}
+
 pub fn read_config() -> Option<ZswapParamsConf> {
     let config_str = fs::read_to_string(constants::CONFIG_PATH).unwrap_or("".to_string());
 
@@ -127,18 +132,6 @@ pub fn save_sys_param(param: &ZswapParam) -> Result<(), Error> {
         .write_all(value.as_bytes())
 }
 
-pub fn is_root() -> bool {
-    // FIXME: Should I check read/write permission instead of user matching?
-    whoami::user() == String::from("root")
-}
-
-pub fn check_root() {
-    if !is_root() {
-        error!("You are not a root user!");
-        exit(1);
-    }
-}
-
 fn get_files(dir: &str) -> Vec<String> {
     let mut files: Vec<String> = Vec::new();
 
@@ -160,6 +153,13 @@ fn get_files(dir: &str) -> Vec<String> {
     files
 }
 
+pub fn check_root() {
+    if !*IS_ROOT {
+        error!("You are not a root user!");
+        exit(1);
+    }
+}
+
 pub fn get_page_size() -> usize {
-    unsafe { sysconf(_SC_PAGESIZE) as usize }
+    *PAGE_SIZE
 }

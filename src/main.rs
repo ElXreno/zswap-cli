@@ -6,6 +6,8 @@
 extern crate clap;
 #[macro_use]
 extern crate log;
+#[macro_use]
+extern crate lazy_static;
 
 use clap::{App, AppSettings, Arg, SubCommand};
 use env_logger::Env;
