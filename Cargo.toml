@@ -14,7 +14,7 @@ panic = "abort"
 codegen-units = 1
 
 [dependencies]
-clap = "2.33.0"
+clap = "2.33.1"
 env_logger = "0.7.1"
 lazy_static = "1.4.0"
 libc = "0.2.69"
