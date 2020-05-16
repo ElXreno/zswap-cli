@@ -2,7 +2,7 @@
 
 Name:           zswap-cli
 Version:        1.0.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Utility for controlling zswap parameters
 
 License:        MPLv2.0
@@ -60,6 +60,9 @@ install -m 0644 -Dp %{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 
 
 %changelog
+* Sat May 16 2020 ElXreno <elxreno@gmail.com> - 1.0.3-2
+- Bump spec
+
 * Fri Apr 24 2020 ElXreno <elxreno@gmail.com> - 1.0.3-1
 - Updated to version 1.0.3
 
