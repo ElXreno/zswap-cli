@@ -7,7 +7,7 @@ Summary:        Utility for controlling zswap parameters
 
 License:        MPLv2.0
 URL:            https://github.com/ElXreno/zswap-cli
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        %{url}/releases/download/v%{version}/%{name}-sources-v%{version}.tar.gz
 Source1:        %{name}.conf
 Source2:        %{name}.service
 Source3:        %{name}.md
@@ -21,10 +21,17 @@ Utility for controlling zswap parameters.
 
 
 %prep
-%autosetup
+%autosetup -n %{name}-sources-v%{version}
 
+# Let's say cargo use vendored sources
 mkdir ~/.cargo
-echo '[source.crates-io]\nreplace-with = "vendored-sources"\n\n[source.vendored-sources]\ndirectory = "vendor"' > ~/.cargo/config
+cat > ~/.cargo/config <<EOF
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "$(pwd)/vendor"
+EOF
 
 
 %build
