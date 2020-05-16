@@ -25,7 +25,7 @@ Utility for controlling zswap parameters.
 
 
 %build
-cargo build --release
+cargo build --release --locked
 strip target/release/%{name}
 pandoc %{SOURCE3} -s -t man -o zswap-cli.1
 
