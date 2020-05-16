@@ -23,6 +23,9 @@ Utility for controlling zswap parameters.
 %prep
 %autosetup
 
+mkdir ~/.cargo
+echo '[source.crates-io]\nreplace-with = "vendored-sources"\n\n[source.vendored-sources]\ndirectory = "vendor"' > ~/.cargo/config
+
 
 %build
 cargo build --release --locked
