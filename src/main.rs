@@ -160,7 +160,7 @@ fn main() {
                         (pages_size as usize * utils::get_page_size()) as i64
                     };
 
-                    let mem_info = linux_stats::meminfo().unwrap_or_default();
+                    let mem_info = procfs::Meminfo::new().unwrap();
 
                     let consumed_size = (mem_info.swap_total - mem_info.swap_free) as f64 / 1024.0;
 
