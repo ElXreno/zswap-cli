@@ -1,5 +1,5 @@
 # zswap-cli
-Utility for controlling zswap parameters
+**Utility for controlling zswap parameters.**
 
 ---
 
