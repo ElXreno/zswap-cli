@@ -91,34 +91,35 @@ pub fn read_debug_param(param_name: String) -> ZswapDebugParam {
 }
 
 pub fn save_sys_params(params: &ZswapParams) {
-    // TODO: Do not show this when nothing to save
-    info!("Saving params...");
-    for param in &params.params {
-        if param.value.is_some()
-            && param.value.as_ref().unwrap() != ""
-            && param.sys_value.is_some()
-            && param
+    if !&params.params.is_empty() {
+        info!("Saving params...");
+        for param in &params.params {
+            if param.value.is_some()
+                && param.value.as_ref().unwrap() != ""
+                && param.sys_value.is_some()
+                && param
                 .sys_value
                 .as_ref()
                 .expect(format!("Can't unwrap sys value for param {}", param.name).as_str())
                 != param.value.as_ref().unwrap()
-        {
-            match save_sys_param(&param) {
-                Ok(_) => info!(
-                    "Successfully saved param {} with value {}. Old value is {}",
-                    param.name,
-                    param.value.as_ref().unwrap(),
-                    param.sys_value.as_ref().unwrap()
-                ),
-                Err(_) => error!(
-                    "Failed to save param {} with value {}! System value is {}",
-                    param.name,
-                    param.value.as_ref().unwrap(),
-                    param.sys_value.as_ref().unwrap()
-                ),
+            {
+                match save_sys_param(&param) {
+                    Ok(_) => info!(
+                        "Successfully saved param {} with value {}. Old value is {}",
+                        param.name,
+                        param.value.as_ref().unwrap(),
+                        param.sys_value.as_ref().unwrap()
+                    ),
+                    Err(_) => error!(
+                        "Failed to save param {} with value {}! System value is {}",
+                        param.name,
+                        param.value.as_ref().unwrap(),
+                        param.sys_value.as_ref().unwrap()
+                    ),
+                }
+            } else {
+                info!("Ignoring param {}", param.name);
             }
-        } else {
-            info!("Ignoring param {}", param.name);
         }
     }
     info!("Done!");
