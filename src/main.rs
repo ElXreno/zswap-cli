@@ -119,7 +119,6 @@ fn main() {
                         match debug_param.name.as_str() {
                             "same_filled_pages" | "stored_pages" => {
                                 let value = debug_param.sys_value.unwrap_or(0);
-                                // TODO: Get page size instead of hardcoded value
                                 let float_value = (value as usize * utils::get_page_size()) as f64
                                     / 1024.0
                                     / 1024.0;
