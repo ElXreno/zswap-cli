@@ -15,8 +15,8 @@ use crate::structs::{ZswapDebugParam, ZswapDebugParams, ZswapParam, ZswapParams,
 use std::process::exit;
 
 lazy_static! {
-    static ref IS_ROOT: bool = { whoami::user() == String::from("root") };
-    static ref PAGE_SIZE: usize = { unsafe { sysconf(_SC_PAGESIZE) as usize } };
+    static ref IS_ROOT: bool = whoami::username() == String::from("root");
+    static ref PAGE_SIZE: usize = unsafe { sysconf(_SC_PAGESIZE) as usize };
 }
 
 pub fn read_config() -> Option<ZswapParamsConf> {
